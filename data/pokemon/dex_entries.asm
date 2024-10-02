@@ -1,4 +1,5 @@
 PokedexEntryPointers:
+	table_width 2, PokedexEntryPointers
 	dw RhydonDexEntry
 	dw KangaskhanDexEntry
 	dw NidoranMDexEntry
@@ -189,10 +190,11 @@ PokedexEntryPointers:
 	dw BellsproutDexEntry
 	dw WeepinbellDexEntry
 	dw VictreebelDexEntry
+	assert_table_length NUM_POKEMON_INDEXES
 
 ; string: species name
 ; height in feet, inches
-; weight in pounds
+; weight in tenths of a pound
 ; text entry
 
 RhydonDexEntry:

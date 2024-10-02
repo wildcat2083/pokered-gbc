@@ -15,7 +15,7 @@ ChoosePlayerName:
 	xor a ; NAME_PLAYER_SCREEN
 	ld [wNamingScreenType], a
 	call DisplayNamingScreen
-	ld a, [wcf4b]
+	ld a, [wStringBuffer]
 	cp "@"
 	jr z, .customName
 	call ClearScreen
@@ -48,13 +48,13 @@ ChooseRivalName:
 	ld a, NAME_RIVAL_SCREEN
 	ld [wNamingScreenType], a
 	call DisplayNamingScreen
-	ld a, [wcf4b]
+	ld a, [wStringBuffer]
 	cp "@"
 	jr z, .customName
 	call ClearScreen
 	call Delay3
 	ld de, Rival1Pic
-	ld b, $13
+	ld b, BANK(Rival1Pic)
 	call IntroDisplayPicCenteredOrUpperRight
 .done
 	ld hl, HisNameIsText
@@ -72,7 +72,7 @@ OakSpeechSlidePicLeft:
 	ld c, 10
 	call DelayFrames
 	pop de
-	ld hl, wcd6d
+	ld hl, wNameBuffer
 	ld bc, NAME_LENGTH
 	call CopyData
 	call Delay3
@@ -209,8 +209,8 @@ GetDefaultName:
 .foundName
 	ld h, d
 	ld l, e
-	ld de, wcd6d
-	ld bc, $14
+	ld de, wNameBuffer
+	ld bc, NAME_BUFFER_LENGTH
 	jp CopyData
 
 INCLUDE "data/player_names_list.asm"

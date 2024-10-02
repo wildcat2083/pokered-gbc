@@ -7,18 +7,18 @@ _GivePokemon::
 	ld a, [wPartyCount]
 	cp PARTY_LENGTH
 	jr c, .addToParty
-	ld a, [wNumInBox]
+	ld a, [wBoxCount]
 	cp MONS_PER_BOX
 	jr nc, .boxFull
 ; add to box
 	xor a
 	ld [wEnemyBattleStatus3], a
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	ld [wEnemyMonSpecies2], a
 	callfar LoadEnemyMonData
 	call SetPokedexOwnedFlag
 	callfar SendNewMonToBox
-	ld hl, wcf4b
+	ld hl, wStringBuffer
 	ld a, [wCurrentBoxNum]
 	and $7f
 	cp 9
@@ -52,18 +52,18 @@ _GivePokemon::
 	ret
 
 SetPokedexOwnedFlag:
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	push af
-	ld [wd11e], a
+	ld [wPokedexNum], a
 	predef IndexToPokedex
-	ld a, [wd11e]
+	ld a, [wPokedexNum]
 	dec a
 	ld c, a
 	ld hl, wPokedexOwned
 	ld b, FLAG_SET
 	predef FlagActionPredef
 	pop af
-	ld [wd11e], a
+	ld [wNamedObjectIndex], a
 	call GetMonName
 	ld hl, GotMonText
 	jp PrintText

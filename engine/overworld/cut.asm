@@ -32,8 +32,8 @@ UsedCut:
 	ld a, [wWhichPokemon]
 	ld hl, wPartyMonNicks
 	call GetPartyMonName
-	ld hl, wd730
-	set 6, [hl]
+	ld hl, wStatusFlags5
+	set BIT_NO_TEXT_DELAY, [hl]
 	call GBPalWhiteOutWithDelay3
 	call ClearSprites
 	call RestoreScreenTilesAndReloadTilePatterns
@@ -49,8 +49,8 @@ UsedCut:
 	ld hl, UsedCutText
 	call PrintText
 	call LoadScreenTilesFromBuffer2
-	ld hl, wd730
-	res 6, [hl]
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	ld a, $ff
 	ld [wUpdateSpritesEnabled], a
 	call InitCutAnimOAM
@@ -99,7 +99,7 @@ InitCutAnimOAM:
 	ld hl, vChars1 tile $7f
 	call LoadCutGrassAnimationTilePattern
 	call WriteCutAnimationOAMBlock
-	ld hl, wOAMBuffer + $93
+	ld hl, wShadowOAMSprite36Attributes
 	ld de, 4
 	ld a, $36 ; Overwrite attributes (use palette 6, green)
 	ld c, e
@@ -112,8 +112,8 @@ InitCutAnimOAM:
 	ret
 
 LoadCutGrassAnimationTilePattern:
-	ld de, AnimationTileset2 tile 6 ; tile depicting a leaf
-	lb bc, BANK(AnimationTileset2), 1
+	ld de, MoveAnimationTiles1 tile 6 ; tile depicting a leaf
+	lb bc, BANK(MoveAnimationTiles1), 1
 	jp CopyVideoData
 
 ; HAX: this used to be called "WriteCutOrBoulderDustAnimationOAMBlock", but the boulder

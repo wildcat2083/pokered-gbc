@@ -56,12 +56,12 @@ TradeAnimCommon:
 	ld [wOptions], a
 	ret
 
-addtradefunc: MACRO
+MACRO addtradefunc
 \1TradeFunc::
 	dw \1
 ENDM
 
-tradefunc: MACRO
+MACRO tradefunc
 	db (\1TradeFunc - TradeFuncPointerTable) / 2
 ENDM
 
@@ -173,8 +173,8 @@ LoadTradingGFXAndMonNames:
 	call ClearSprites
 	ld a, $ff
 	ld [wUpdateSpritesEnabled], a
-	ld hl, wd730
-	set 6, [hl] ; turn on instant text printing
+	ld hl, wStatusFlags5
+	set BIT_NO_TEXT_DELAY, [hl]
 	ld a, [wOnSGB]
 	and a
 	ld a, $e4 ; non-SGB OBP0
@@ -186,14 +186,14 @@ LoadTradingGFXAndMonNames:
 	xor a
 	ldh [hAutoBGTransferEnabled], a
 	ld a, [wTradedPlayerMonSpecies]
-	ld [wd11e], a
+	ld [wNamedObjectIndex], a
 	call GetMonName
-	ld hl, wcd6d
-	ld de, wcf4b
+	ld hl, wNameBuffer
+	ld de, wStringBuffer
 	ld bc, NAME_LENGTH
 	call CopyData
 	ld a, [wTradedEnemyMonSpecies]
-	ld [wd11e], a
+	ld [wNamedObjectIndex], a
 	jp GetMonName
 
 Trade_LoadMonPartySpriteGfx:
@@ -218,8 +218,8 @@ Trade_SwapNames:
 Trade_Cleanup:
 	xor a
 	call LoadGBPal
-	ld hl, wd730
-	res 6, [hl] ; turn off instant text printing
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	ret
 
 Trade_ShowPlayerMon:
@@ -321,7 +321,7 @@ Trade_AnimateBallEnteringLinkCable:
 	xor $1
 	ld [wLinkCableAnimBulgeToggle], a
 	add $7e
-	ld hl, wOAMBuffer + $02
+	ld hl, wShadowOAMSprite00TileID
 	ld de, 4
 	ld c, e
 .cycleLinkCableBulgeTile
@@ -605,7 +605,7 @@ Trade_AnimCircledMon:
 	ldh a, [rBGP]
 	xor $3c ; make link cable flash
 	ldh [rBGP], a
-	ld hl, wOAMBuffer + $02
+	ld hl, wShadowOAMSprite00TileID
 	ld de, $4
 	ld c, $14
 .loop
@@ -625,7 +625,7 @@ Trade_WriteCircledMonOAM:
 	call Trade_WriteCircleOAM
 
 Trade_AddOffsetsToOAMCoords:
-	ld hl, wOAMBuffer
+	ld hl, wShadowOAM
 	ld c, $14
 .loop
 	ld a, [wBaseCoordY]
@@ -703,7 +703,7 @@ Trade_WriteCircleOAM:
 	jr nz, .loop
 	ret
 
-trade_circle_oam: MACRO
+MACRO trade_circle_oam
 	dw \1
 	db \2, \3
 ENDM
@@ -733,8 +733,8 @@ Trade_CircleOAM3:
 
 ; a = species
 Trade_LoadMonSprite:
-	ld [wcf91], a
-	ld [wd0b5], a
+	ld [wCurPartySpecies], a
+	ld [wCurSpecies], a
 	ld [wWholeScreenPaletteMonSpecies], a
 	ld b, SET_PAL_POKEMON_WHOLE_SCREEN
 	ld c, 0

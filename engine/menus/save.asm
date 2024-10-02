@@ -1,6 +1,5 @@
 LoadSAV:
-;(if carry -> write
-;"the file data is destroyed")
+; if carry, write "the file data is destroyed"
 	call ClearScreen
 	call LoadFontTilePatterns
 	call LoadTextBoxTilePatterns
@@ -13,15 +12,15 @@ LoadSAV:
 	ld a, $2 ; good checksum
 	jr .goodsum
 .badsum
-	ld hl, wd730
+	ld hl, wStatusFlags5
 	push hl
-	set 6, [hl]
+	set BIT_NO_TEXT_DELAY, [hl]
 	ld hl, FileDataDestroyedText
 	call PrintText
 	ld c, 100
 	call DelayFrames
 	pop hl
-	res 6, [hl]
+	res BIT_NO_TEXT_DELAY, [hl]
 	ld a, $1 ; bad checksum
 .goodsum
 	ld [wSaveFileStatus], a
@@ -37,20 +36,23 @@ LoadSAV0:
 	ld a, $1
 	ld [MBC1SRamBankingMode], a
 	ld [MBC1SRamBank], a
-	ld hl, sPlayerName ; hero name located in SRAM
-	ld bc, sMainDataCheckSum - sPlayerName ; but here checks the full SAV
+; This vc_hook does not have to be in any particular location.
+; It is defined here because it refers to the same labels as the two lines below.
+	vc_hook Unknown_save_limit
+	ld hl, sGameData
+	ld bc, sGameDataEnd - sGameData
 	call SAVCheckSum
 	ld c, a
-	ld a, [sMainDataCheckSum] ; SAV's checksum
+	ld a, [sMainDataCheckSum]
 	cp c
 	jp z, .checkSumsMatched
 
 ; If the computed checksum didn't match the saved on, try again.
-	ld hl, sPlayerName
-	ld bc, sMainDataCheckSum - sPlayerName
+	ld hl, sGameData
+	ld bc, sGameDataEnd - sGameData
 	call SAVCheckSum
 	ld c, a
-	ld a, [sMainDataCheckSum] ; SAV's checksum
+	ld a, [sMainDataCheckSum]
 	cp c
 	jp nz, SAVBadCheckSum
 
@@ -64,7 +66,7 @@ LoadSAV0:
 	ld bc, wMainDataEnd - wMainDataStart
 	call CopyData
 	ld hl, wCurMapTileset
-	set 7, [hl]
+	set BIT_NO_PREVIOUS_MAP, [hl]
 	ld hl, sSpriteData
 	ld de, wSpriteDataStart
 	ld bc, wSpriteDataEnd - wSpriteDataStart
@@ -84,11 +86,11 @@ LoadSAV1:
 	ld a, $1
 	ld [MBC1SRamBankingMode], a
 	ld [MBC1SRamBank], a
-	ld hl, sPlayerName ; hero name located in SRAM
-	ld bc, sMainDataCheckSum - sPlayerName  ; but here checks the full SAV
+	ld hl, sGameData
+	ld bc, sGameDataEnd - sGameData
 	call SAVCheckSum
 	ld c, a
-	ld a, [sMainDataCheckSum] ; SAV's checksum
+	ld a, [sMainDataCheckSum]
 	cp c
 	jr nz, SAVBadCheckSum
 	ld hl, sCurBoxData
@@ -104,11 +106,11 @@ LoadSAV2:
 	ld a, $1
 	ld [MBC1SRamBankingMode], a
 	ld [MBC1SRamBank], a
-	ld hl, sPlayerName ; hero name located in SRAM
-	ld bc, sMainDataCheckSum - sPlayerName  ; but here checks the full SAV
+	ld hl, sGameData
+	ld bc, sGameDataEnd - sGameData
 	call SAVCheckSum
 	ld c, a
-	ld a, [sMainDataCheckSum] ; SAV's checksum
+	ld a, [sMainDataCheckSum]
 	cp c
 	jp nz, SAVBadCheckSum
 	ld hl, sPartyData
@@ -219,8 +221,8 @@ SaveSAVtoSRAM0:
 	call CopyData
 	ldh a, [hTileAnimations]
 	ld [sTileAnimations], a
-	ld hl, sPlayerName
-	ld bc, sMainDataCheckSum - sPlayerName
+	ld hl, sGameData
+	ld bc, sGameDataEnd - sGameData
 	call SAVCheckSum
 	ld [sMainDataCheckSum], a
 	xor a
@@ -239,8 +241,8 @@ SaveSAVtoSRAM1:
 	ld de, sCurBoxData
 	ld bc, wBoxDataEnd - wBoxDataStart
 	call CopyData
-	ld hl, sPlayerName
-	ld bc, sMainDataCheckSum - sPlayerName
+	ld hl, sGameData
+	ld bc, sGameDataEnd - sGameData
 	call SAVCheckSum
 	ld [sMainDataCheckSum], a
 	xor a
@@ -262,8 +264,8 @@ SaveSAVtoSRAM2:
 	ld de, sMainData
 	ld bc, wPokedexSeenEnd - wPokedexOwned
 	call CopyData
-	ld hl, sPlayerName
-	ld bc, sMainDataCheckSum - sPlayerName
+	ld hl, sGameData
+	ld bc, sGameDataEnd - sGameData
 	call SAVCheckSum
 	ld [sMainDataCheckSum], a
 	xor a
@@ -347,16 +349,16 @@ ChangeBox::
 	and a
 	ret nz ; return if No was chosen
 	ld hl, wCurrentBoxNum
-	bit 7, [hl] ; is it the first time player is changing the box?
+	bit BIT_HAS_CHANGED_BOXES, [hl] ; is it the first time player is changing the box?
 	call z, EmptyAllSRAMBoxes ; if so, empty all boxes in SRAM
 	call DisplayChangeBoxMenu
 	call UpdateSprites
 	ld hl, hUILayoutFlags
-	set 1, [hl]
+	set BIT_DOUBLE_SPACED_MENU, [hl]
 	call HandleMenuInput
 	ld hl, hUILayoutFlags
-	res 1, [hl]
-	bit 1, a ; pressed b
+	res BIT_DOUBLE_SPACED_MENU, [hl]
+	bit BIT_B_BUTTON, a
 	ret nz
 	call GetBoxSRAMLocation
 	ld e, l
@@ -364,12 +366,12 @@ ChangeBox::
 	ld hl, wBoxDataStart
 	call CopyBoxToOrFromSRAM ; copy old box from WRAM to SRAM
 	ld a, [wCurrentMenuItem]
-	set 7, a
+	set BIT_HAS_CHANGED_BOXES, a
 	ld [wCurrentBoxNum], a
 	call GetBoxSRAMLocation
 	ld de, wBoxDataStart
 	call CopyBoxToOrFromSRAM ; copy new box from SRAM to WRAM
-	ld hl, wMapTextPtr
+	ld hl, wCurMapTextPtr
 	ld de, wChangeBoxSavedMapTextPointer
 	ld a, [hli]
 	ld [de], a
@@ -446,12 +448,12 @@ DisplayChangeBoxMenu:
 	ld c, 7
 	call TextBoxBorder
 	ld hl, hUILayoutFlags
-	set 2, [hl]
+	set BIT_SINGLE_SPACED_LINES, [hl]
 	ld de, BoxNames
 	hlcoord 13, 1
 	call PlaceString
 	ld hl, hUILayoutFlags
-	res 2, [hl]
+	res BIT_SINGLE_SPACED_LINES, [hl]
 	ld a, [wCurrentBoxNum]
 	and $7f
 	cp 9
@@ -580,7 +582,7 @@ GetMonCountsForAllBoxes:
 	ld c, a
 	ld b, 0
 	add hl, bc
-	ld a, [wNumInBox]
+	ld a, [wBoxCount]
 	ld [hl], a
 
 	ret
@@ -612,8 +614,8 @@ SAVCheckRandomID:
 	ld a, [sPlayerName]
 	and a
 	jr z, .next
-	ld hl, sPlayerName
-	ld bc, sMainDataCheckSum - sPlayerName
+	ld hl, sGameData
+	ld bc, sGameDataEnd - sGameData
 	call SAVCheckSum
 	ld c, a
 	ld a, [sMainDataCheckSum]
@@ -702,7 +704,7 @@ ClearSAV:
 
 PadSRAM_FF:
 	ld [MBC1SRamBank], a
-	ld hl, SRAM_Begin
-	ld bc, SRAM_End - SRAM_Begin
+	ld hl, STARTOF(SRAM)
+	ld bc, SIZEOF(SRAM)
 	ld a, $ff
 	jp FillMemory

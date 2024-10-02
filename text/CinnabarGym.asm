@@ -1,4 +1,4 @@
-_BlaineBattleText::
+_CinnabarGymBlainePreBattleText::
 	text "Hah!"
 
 	para "I am BLAINE! I"
@@ -13,7 +13,7 @@ _BlaineBattleText::
 	line "have BURN HEAL!"
 	done
 
-_BlaineEndBattleText::
+_CinnabarGymBlaineReceivedVolcanoBadgeText::
 	text "I have"
 	line "burnt out!"
 
@@ -21,7 +21,7 @@ _BlaineEndBattleText::
 	line "the VOLCANOBADGE!@"
 	text_end
 
-_BlaineFireBlastText::
+_CinnabarGymBlainePostBattleAdviceText::
 	text "FIRE BLAST is the"
 	line "ultimate fire"
 	cont "technique!"
@@ -30,7 +30,7 @@ _BlaineFireBlastText::
 	line "water #MON!"
 	done
 
-_BlaineBadgeText::
+_CinnabarGymBlaineVolcanoBadgeInfoText::
 	text "Hah!"
 
 	para "The VOLCANOBADGE"
@@ -42,14 +42,14 @@ _BlaineBadgeText::
 	line "have this too!"
 	done
 
-_ReceivedTM38Text::
+_CinnabarGymBlaineReceivedTM38Text::
 	text "<PLAYER> received"
 	line "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "!@"
 	text_end
 
-_TM38ExplanationText::
+_CinnabarGymBlaineTM38ExplanationText::
 	text_start
 
 	para "TM38 contains"
@@ -63,23 +63,23 @@ _TM38ExplanationText::
 	cont "good bets!"
 	done
 
-_TM38NoRoomText::
+_CinnabarGymBlaineTM38NoRoomText::
 	text "Make room for my"
 	line "gift!"
 	done
 
-_CinnabarGymText_7595f::
+_CinnabarGymSuperNerd1BattleText::
 	text "Do you know how"
 	line "hot #MON fire"
 	cont "breath can get?"
 	done
 
-_CinnabarGymText_75964::
+_CinnabarGymSuperNerd1EndBattleText::
 	text "Yow!"
 	line "Hot, hot, hot!"
 	prompt
 
-_CinnabarGymText_75969::
+_CinnabarGymSuperNerd1AfterBattleText::
 	text "Fire, or to be"
 	line "more precise,"
 	cont "combustion..."
@@ -88,66 +88,66 @@ _CinnabarGymText_75969::
 	line "blah..."
 	done
 
-_CinnabarGymText_75994::
+_CinnabarGymSuperNerd2BattleText::
 	text "I was a thief, but"
 	line "I became straight"
 	cont "as a trainer!"
 	done
 
-_CinnabarGymText_75999::
+_CinnabarGymSuperNerd2EndBattleText::
 	text "I"
 	line "surrender!"
 	prompt
 
-_CinnabarGymText_7599e::
+_CinnabarGymSuperNerd2AfterBattleText::
 	text "I can't help"
 	line "stealing other"
 	cont "people's #MON!"
 	done
 
-_CinnabarGymText_759c9::
+_CinnabarGymSuperNerd3BattleText::
 	text "You can't win!"
 	line "I have studied"
 	cont "#MON totally!"
 	done
 
-_CinnabarGymText_759ce::
+_CinnabarGymSuperNerd3EndBattleText::
 	text "Waah!"
 	line "My studies!"
 	prompt
 
-_CinnabarGymText_759d3::
+_CinnabarGymSuperNerd3AfterBattleText::
 	text "My theories are"
 	line "too complicated"
 	cont "for you!"
 	done
 
-_CinnabarGymText_759fe::
+_CinnabarGymSuperNerd4BattleText::
 	text "I just like using"
 	line "fire #MON!"
 	done
 
-_CinnabarGymText_75a03::
+_CinnabarGymSuperNerd4EndBattleText::
 	text "Too hot"
 	line "to handle!"
 	prompt
 
-_CinnabarGymText_75a08::
+_CinnabarGymSuperNerd4AfterBattleText::
 	text "I wish there was"
 	line "a thief #MON!"
 	cont "I'd use that!"
 	done
 
-_CinnabarGymText_75a33::
+_CinnabarGymSuperNerd5BattleText::
 	text "I know why BLAINE"
 	line "became a trainer!"
 	done
 
-_CinnabarGymText_75a38::
+_CinnabarGymSuperNerd5EndBattleText::
 	text "Ow!"
 	prompt
 
-_CinnabarGymText_75a3d::
+_CinnabarGymSuperNerd5AfterBattleText::
 	text "BLAINE was lost"
 	line "in the mountains"
 	cont "when a fiery bird"
@@ -158,40 +158,40 @@ _CinnabarGymText_75a3d::
 	cont "his way down!"
 	done
 
-_CinnabarGymText_75a68::
+_CinnabarGymSuperNerd6BattleText::
 	text "I've been to many"
 	line "GYMs, but this is"
 	cont "my favorite!"
 	done
 
-_CinnabarGymText_75a6d::
+_CinnabarGymSuperNerd6EndBattleText::
 	text "Yowza!"
 	line "Too hot!"
 	prompt
 
-_CinnabarGymText_75a72::
+_CinnabarGymSuperNerd6AfterBattleText::
 	text "Us fire #MON"
 	line "fans like PONYTA"
 	cont "and NINETALES!"
 	done
 
-_CinnabarGymText_75a9d::
+_CinnabarGymSuperNerd7BattleText::
 	text "Fire is weak"
 	line "against H2O!"
 	done
 
-_CinnabarGymText_75aa2::
+_CinnabarGymSuperNerd7EndBattleText::
 	text "Oh!"
 	line "Snuffed out!"
 	prompt
 
-_CinnabarGymText_75aa7::
+_CinnabarGymSuperNerd7AfterBattleText::
 	text "Water beats fire!"
 	line "But, fire melts"
 	cont "ice #MON!"
 	done
 
-_CinnabarGymText_75ac2::
+_CinnabarGymGymGuideChampInMakingText::
 	text "Yo! Champ in"
 	line "making!"
 
@@ -206,7 +206,7 @@ _CinnabarGymText_75ac2::
 	line "some BURN HEALs!"
 	done
 
-_CinnabarGymText_75ac7::
+_CinnabarGymGymGuideBeatBlaineText::
 	text "<PLAYER>! You beat"
 	line "that fire brand!"
 	done

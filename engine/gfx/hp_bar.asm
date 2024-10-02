@@ -214,11 +214,11 @@ UpdateHPBar_PrintHPNumber:
 	ld [wHPBarTempHP], a
 	push hl
 	ldh a, [hUILayoutFlags]
-	bit 0, a
-	jr z, .asm_fb15
+	bit BIT_PARTY_MENU_HP_BAR, a
+	jr z, .hpBelowBar
 	ld de, $9
 	jr .next
-.asm_fb15
+.hpBelowBar
 	ld de, $15
 .next
 	add hl, de

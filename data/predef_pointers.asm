@@ -1,10 +1,10 @@
-add_predef: MACRO
+MACRO add_predef
 \1Predef::
-IF _NARG == 1
-	dba \1
-ELSE
-	dbw \2, \1
-ENDC
+	IF _NARG == 1
+		dba \1
+	ELSE
+		dbw \2, \1
+	ENDC
 ENDM
 
 PredefPointers::
@@ -101,7 +101,7 @@ PredefPointers::
 	add_predef EnterMapAnim, $1E ; wrong bank
 	add_predef GetTileTwoStepsInFrontOfPlayer
 	add_predef CheckForCollisionWhenPushingBoulder
-	add_predef PrintStrengthTxt
+	add_predef PrintStrengthText
 	add_predef PickUpItem
 	add_predef PrintMoveType
 	add_predef LoadMovePPs

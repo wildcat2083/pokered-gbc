@@ -24,8 +24,8 @@ LinkCableHelp::
 	ld a, 1
 	ld [wTopMenuItemX], a
 .linkHelpLoop
-	ld hl, wd730
-	set 6, [hl]
+	ld hl, wStatusFlags5
+	set BIT_NO_TEXT_DELAY, [hl]
 	hlcoord 0, 0
 	ld b, 8
 	ld c, 13
@@ -36,13 +36,13 @@ LinkCableHelp::
 	ld hl, LinkCableHelpText2
 	call PrintText
 	call HandleMenuInput
-	bit 1, a ; pressed b
+	bit BIT_B_BUTTON, a
 	jr nz, .exit
 	ld a, [wCurrentMenuItem]
 	cp 3 ; pressed a on "STOP READING"
 	jr z, .exit
-	ld hl, wd730
-	res 6, [hl]
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	ld hl, LinkCableInfoTexts
 	add a
 	ld d, 0
@@ -54,8 +54,8 @@ LinkCableHelp::
 	call PrintText
 	jp .linkHelpLoop
 .exit
-	ld hl, wd730
-	res 6, [hl]
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	call LoadScreenTilesFromBuffer1
 	jp TextScriptEnd
 
@@ -108,8 +108,8 @@ ViridianSchoolBlackboard::
 	ld a, 1
 	ld [wTopMenuItemX], a
 .blackboardLoop
-	ld hl, wd730
-	set 6, [hl]
+	ld hl, wStatusFlags5
+	set BIT_NO_TEXT_DELAY, [hl]
 	hlcoord 0, 0
 	lb bc, 6, 10
 	call TextBoxBorder
@@ -122,9 +122,9 @@ ViridianSchoolBlackboard::
 	ld hl, ViridianSchoolBlackboardText2
 	call PrintText
 	call HandleMenuInput ; pressing up and down is handled in here
-	bit 1, a ; pressed b
+	bit BIT_B_BUTTON, a ; pressed b
 	jr nz, .exitBlackboard
-	bit 4, a ; pressed right
+	bit BIT_D_RIGHT, a
 	jr z, .didNotPressRight
 	; move cursor to right column
 	ld a, 2
@@ -137,7 +137,7 @@ ViridianSchoolBlackboard::
 	ld [wMenuItemOffset], a
 	jr .blackboardLoop
 .didNotPressRight
-	bit 5, a ; pressed left
+	bit BIT_D_LEFT, a
 	jr z, .didNotPressLeftOrRight
 	; move cursor to left column
 	ld a, 2
@@ -158,8 +158,8 @@ ViridianSchoolBlackboard::
 	jr z, .exitBlackboard
 	; we must have pressed a on a status condition
 	; so print the text
-	ld hl, wd730
-	res 6, [hl]
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	ld hl, ViridianBlackboardStatusPointers
 	add a
 	ld d, 0
@@ -171,8 +171,8 @@ ViridianSchoolBlackboard::
 	call PrintText
 	jp .blackboardLoop
 .exitBlackboard
-	ld hl, wd730
-	res 6, [hl]
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	call LoadScreenTilesFromBuffer1
 	jp TextScriptEnd
 

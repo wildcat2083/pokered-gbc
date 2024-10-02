@@ -93,8 +93,8 @@ PKMNLeaguePCText: db "<PKMN>LEAGUE@"
 LogOffPCText:     db "LOG OFF@"
 
 BillsPC_::
-	ld hl, wd730
-	set 6, [hl]
+	ld hl, wStatusFlags5
+	set BIT_NO_TEXT_DELAY, [hl]
 	xor a
 	ld [wParentMenuItem], a
 	inc a               ; MONSTER_NAME
@@ -102,8 +102,8 @@ BillsPC_::
 	call LoadHpBarAndStatusTilePatterns
 	ld a, [wListScrollOffset]
 	push af
-	ld a, [wFlags_0xcd60]
-	bit 3, a ; accessing Bill's PC through another PC?
+	ld a, [wMiscFlags]
+	bit BIT_USING_GENERIC_PC, a
 	jr nz, BillsPCMenu
 ; accessing it directly
 	ld a, SFX_TURN_ON_PC
@@ -171,8 +171,8 @@ BillsPCMenu:
 	ldh [hAutoBGTransferEnabled], a
 	call Delay3
 	call HandleMenuInput
-	bit 1, a
-	jp nz, ExitBillsPC ; b button
+	bit BIT_B_BUTTON, a
+	jp nz, ExitBillsPC
 	call PlaceUnfilledArrowMenuCursor
 	ld a, [wCurrentMenuItem]
 	ld [wParentMenuItem], a
@@ -186,8 +186,8 @@ BillsPCMenu:
 	jp z, BillsPCChangeBox ; change box
 
 ExitBillsPC:
-	ld a, [wFlags_0xcd60]
-	bit 3, a ; accessing Bill's PC through another PC?
+	ld a, [wMiscFlags]
+	bit BIT_USING_GENERIC_PC, a
 	jr nz, .next
 ; accessing it directly
 	call LoadTextBoxTilePatterns
@@ -195,13 +195,13 @@ ExitBillsPC:
 	call PlaySound
 	call WaitForSoundToFinish
 .next
-	ld hl, wFlags_0xcd60
-	res 5, [hl]
+	ld hl, wMiscFlags
+	res BIT_NO_MENU_BUTTON_SOUND, [hl]
 	call LoadScreenTilesFromBuffer2
 	pop af
 	ld [wListScrollOffset], a
-	ld hl, wd730
-	res 6, [hl]
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	ret
 
 BillsPCDeposit:
@@ -212,7 +212,7 @@ BillsPCDeposit:
 	call PrintText
 	jp BillsPCMenu
 .partyLargeEnough
-	ld a, [wNumInBox]
+	ld a, [wBoxCount]
 	cp MONS_PER_BOX
 	jr nz, .boxNotFull
 	ld hl, BoxFullText
@@ -224,7 +224,7 @@ BillsPCDeposit:
 	jp c, BillsPCMenu
 	call DisplayDepositWithdrawMenu
 	jp nc, BillsPCMenu
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	call GetCryData
 	call PlaySoundWaitForCurrent
 	ld a, PARTY_TO_BOX
@@ -254,7 +254,7 @@ BillsPCDeposit:
 	jp BillsPCMenu
 
 BillsPCWithdraw:
-	ld a, [wNumInBox]
+	ld a, [wBoxCount]
 	and a
 	jr nz, .boxNotEmpty
 	ld hl, NoMonText
@@ -268,7 +268,7 @@ BillsPCWithdraw:
 	call PrintText
 	jp BillsPCMenu
 .partyNotFull
-	ld hl, wNumInBox
+	ld hl, wBoxCount
 	call DisplayMonListMenu
 	jp c, BillsPCMenu
 	call DisplayDepositWithdrawMenu
@@ -276,7 +276,7 @@ BillsPCWithdraw:
 	ld a, [wWhichPokemon]
 	ld hl, wBoxMonNicks
 	call GetPartyMonName
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	call GetCryData
 	call PlaySoundWaitForCurrent
 	xor a ; BOX_TO_PARTY
@@ -291,14 +291,14 @@ BillsPCWithdraw:
 	jp BillsPCMenu
 
 BillsPCRelease:
-	ld a, [wNumInBox]
+	ld a, [wBoxCount]
 	and a
 	jr nz, .loop
 	ld hl, NoMonText
 	call PrintText
 	jp BillsPCMenu
 .loop
-	ld hl, wNumInBox
+	ld hl, wBoxCount
 	call DisplayMonListMenu
 	jp c, BillsPCMenu
 	ld hl, OnceReleasedText
@@ -311,7 +311,7 @@ BillsPCRelease:
 	ld [wRemoveMonFromBox], a
 	call RemovePokemon
 	call WaitForSoundToFinish
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	call PlayCry
 	ld hl, MonWasReleasedText
 	call PrintText
@@ -416,7 +416,7 @@ DisplayDepositWithdrawMenu:
 	ld [wPartyAndBillsPCSavedMenuItem], a
 .loop
 	call HandleMenuInput
-	bit 1, a ; pressed B?
+	bit BIT_B_BUTTON, a
 	jr nz, .exit
 	ld a, [wCurrentMenuItem]
 	and a
@@ -546,4 +546,3 @@ JustAMomentText::
 
 OpenBillsPCText::
 	script_bills_pc
-

@@ -3,7 +3,7 @@
 	const MOVE_GENGAR_RIGHT
 	const MOVE_GENGAR_LEFT
 
-ANIMATION_END EQU 80
+DEF ANIMATION_END EQU 80
 
 PlayIntro:
 	xor a
@@ -158,7 +158,7 @@ AnimateIntroNidorino:
 	jr AnimateIntroNidorino
 
 UpdateIntroNidorinoOAM:
-	ld hl, wOAMBuffer
+	ld hl, wShadowOAM
 	ld a, [wIntroNidorinoBaseTile]
 	ld d, a
 .loop
@@ -177,7 +177,7 @@ UpdateIntroNidorinoOAM:
 	ret
 
 InitIntroNidorinoOAM:
-	ld hl, wOAMBuffer
+	ld hl, wShadowOAM
 	ld d, 0
 .loop
 	push bc
@@ -319,8 +319,8 @@ PlayShootingStar:
 	call LoadIntroGraphics
 	call EnableLCD
 	ld hl, rLCDC
-	res 5, [hl]
-	set 3, [hl]
+	res rLCDC_WINDOW_ENABLE, [hl]
+	set rLCDC_BG_TILEMAP, [hl]
 	ld c, 64
 	call DelayFrames
 	farcall AnimateShootingStar

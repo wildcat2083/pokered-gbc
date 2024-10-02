@@ -15,8 +15,8 @@ DisplayListMenuID::
 	ld a, BANK(DisplayBattleMenu)
 .bankswitch
 	call BankswitchHome
-	ld hl, wd730
-	set 6, [hl] ; turn off letter printing delay
+	ld hl, wStatusFlags5
+	set BIT_NO_TEXT_DELAY, [hl]
 	xor a
 	ld [wMenuItemToSwap], a ; 0 means no item is currently being swapped
 	ld [wListCount], a
@@ -84,7 +84,7 @@ DisplayListMenuIDLoop::
 	push af
 	call PlaceMenuCursor
 	pop af
-	bit 0, a ; was the A button pressed?
+	bit BIT_A_BUTTON, a
 	jp z, .checkOtherKeys
 .buttonAPressed
 	ld a, [wCurrentMenuItem]
@@ -124,28 +124,30 @@ DisplayListMenuIDLoop::
 	ld b, 0
 	add hl, bc
 	ld a, [hl]
-	ld [wcf91], a
+	ld [wCurListMenuItem], a
 	ld a, [wListMenuID]
 	and a ; PCPOKEMONLISTMENU?
 	jr z, .pokemonList
+; if it's an item menu
+	assert wCurListMenuItem == wCurItem
 	push hl
 	call GetItemPrice
 	pop hl
 	ld a, [wListMenuID]
 	cp ITEMLISTMENU
 	jr nz, .skipGettingQuantity
-; if it's an item menu
 	inc hl
 	ld a, [hl] ; a = item quantity
 	ld [wMaxItemQuantity], a
 .skipGettingQuantity
-	ld a, [wcf91]
-	ld [wd0b5], a
+	ld a, [wCurItem]
+	ld [wNameListIndex], a
 	ld a, BANK(ItemNames)
 	ld [wPredefBank], a
 	call GetName
 	jr .storeChosenEntry
 .pokemonList
+	assert wCurListMenuItem == wCurPartySpecies
 	ld hl, wPartyCount
 	ld a, [wListPointer]
 	cp l ; is it a list of party pokemon or box pokemon?
@@ -156,24 +158,24 @@ DisplayListMenuIDLoop::
 	ld a, [wWhichPokemon]
 	call GetPartyMonName
 .storeChosenEntry ; store the menu entry that the player chose and return
-	ld de, wcd6d
-	call CopyStringToCF4B ; copy name to wcf4b
+	ld de, wNameBuffer
+	call CopyToStringBuffer
 	ld a, CHOSE_MENU_ITEM
 	ld [wMenuExitMethod], a
 	ld a, [wCurrentMenuItem]
 	ld [wChosenMenuItem], a
 	xor a
 	ldh [hJoy7], a ; joypad state update flag
-	ld hl, wd730
-	res 6, [hl] ; turn on letter printing delay
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	jp BankswitchBack
 .checkOtherKeys ; check B, SELECT, Up, and Down keys
-	bit 1, a ; was the B button pressed?
+	bit BIT_B_BUTTON, a
 	jp nz, ExitListMenu ; if so, exit the menu
-	bit 2, a ; was the select button pressed?
+	bit BIT_SELECT, a
 	jp nz, HandleItemListSwapping ; if so, allow the player to swap menu entries
 	ld b, a
-	bit 7, b ; was Down pressed?
+	bit BIT_D_DOWN, b
 	ld hl, wListScrollOffset
 	jr z, .upPressed
 .downPressed
@@ -220,13 +222,13 @@ DisplayChooseQuantityMenu::
 .waitForKeyPressLoop
 	call JoypadLowSensitivity
 	ldh a, [hJoyPressed] ; newly pressed buttons
-	bit 0, a ; was the A button pressed?
+	bit BIT_A_BUTTON, a
 	jp nz, .buttonAPressed
-	bit 1, a ; was the B button pressed?
+	bit BIT_B_BUTTON, a
 	jp nz, .buttonBPressed
-	bit 6, a ; was Up pressed?
+	bit BIT_D_UP, a
 	jr nz, .incrementQuantity
-	bit 7, a ; was Down pressed?
+	bit BIT_D_DOWN, a
 	jr nz, .decrementQuantity
 	jr .waitForKeyPressLoop
 .incrementQuantity
@@ -325,8 +327,8 @@ ExitListMenu::
 	ld [wMenuWatchMovingOutOfBounds], a
 	xor a
 	ldh [hJoy7], a
-	ld hl, wd730
-	res 6, [hl]
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	call BankswitchBack
 	xor a
 	ld [wMenuItemToSwap], a ; 0 means no item is currently being swapped
@@ -365,7 +367,7 @@ PrintListMenuEntries::
 	ld a, b
 	ld [wWhichPokemon], a
 	ld a, [de]
-	ld [wd11e], a
+	ld [wNamedObjectIndex], a
 	cp $ff
 	jp z, .printCancelMenuItem
 	push bc
@@ -413,8 +415,8 @@ PrintListMenuEntries::
 	push hl
 	ld a, [de]
 	ld de, ItemPrices
-	ld [wcf91], a
-	call GetItemPrice ; get price
+	ld [wCurItem], a
+	call GetItemPrice
 	pop hl
 	ld bc, SCREEN_WIDTH + 5 ; 1 row down and 5 columns right
 	add hl, bc
@@ -425,7 +427,7 @@ PrintListMenuEntries::
 	and a ; PCPOKEMONLISTMENU?
 	jr nz, .skipPrintingPokemonLevel
 .printPokemonLevel
-	ld a, [wd11e]
+	ld a, [wNamedObjectIndex]
 	push af
 	push hl
 	ld hl, wPartyCount
@@ -458,7 +460,7 @@ PrintListMenuEntries::
 	add hl, bc
 	call PrintLevel
 	pop af
-	ld [wd11e], a
+	ld [wNamedObjectIndex], a
 .skipPrintingPokemonLevel
 	pop hl
 	pop de
@@ -467,8 +469,8 @@ PrintListMenuEntries::
 	cp ITEMLISTMENU
 	jr nz, .nextListEntry
 .printItemQuantity
-	ld a, [wd11e]
-	ld [wcf91], a
+	ld a, [wNamedObjectIndex]
+	ld [wCurItem], a
 	call IsKeyItem ; check if item is unsellable
 	ld a, [wIsKeyItem]
 	and a ; is the item unsellable?
@@ -478,18 +480,18 @@ PrintListMenuEntries::
 	add hl, bc
 	ld a, "×"
 	ld [hli], a
-	ld a, [wd11e]
+	ld a, [wNamedObjectIndex]
 	push af
 	ld a, [de]
 	ld [wMaxItemQuantity], a
 	push de
-	ld de, wd11e
+	ld de, wTempByteValue
 	ld [de], a
 	lb bc, 1, 2
 	call PrintNumber
 	pop de
 	pop af
-	ld [wd11e], a
+	ld [wNamedObjectIndex], a
 	pop hl
 .skipPrintingItemQuantity
 	inc de

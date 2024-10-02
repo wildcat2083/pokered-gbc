@@ -59,7 +59,7 @@ _ItemUseBallText06::
 _SurfingGotOnText::
 	text "<PLAYER> got on"
 	line "@"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "!"
 	prompt
 
@@ -69,10 +69,10 @@ _SurfingNoPlaceToGetOffText::
 	prompt
 
 _VitaminStatRoseText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "'s"
 	line "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text " rose."
 	prompt
 
@@ -138,13 +138,13 @@ _RestorePPWhichTechniqueText::
 	done
 
 _PPMaxedOutText::
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "'s PP"
 	line "is maxed out."
 	prompt
 
 _PPIncreasedText::
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "'s PP"
 	line "increased."
 	prompt
@@ -164,26 +164,26 @@ _BootedUpHMText::
 _TeachMachineMoveText::
 	text "It contained"
 	line "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "!"
 
 	para "Teach @"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text_start
 	line "to a #MON?"
 	done
 
 _MonCannotLearnMachineMoveText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " is not"
 	line "compatible with"
 	cont "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "."
 
 	para "It can't learn"
 	line "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "."
 	prompt
 
@@ -220,7 +220,7 @@ _NoCyclingAllowedHereText::
 _NoSurfingHereText::
 	text "No SURFing on"
 	line "@"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " here!"
 	prompt
 

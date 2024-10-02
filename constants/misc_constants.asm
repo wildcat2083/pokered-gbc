@@ -1,6 +1,6 @@
 ; Boolean checks
-FALSE EQU 0
-TRUE  EQU 1
+DEF FALSE EQU 0
+DEF TRUE  EQU 1
 
 ; flag operations
 	const_def

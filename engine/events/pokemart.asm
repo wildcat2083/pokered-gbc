@@ -72,7 +72,7 @@ DisplayPokemartDialogue_::
 	ld a, [wIsKeyItem]
 	and a
 	jr nz, .unsellableItem
-	ld a, [wcf91]
+	ld a, [wCurItem]
 	call IsItemHM
 	jr c, .unsellableItem
 	ld a, PRICEDITEMLISTMENU
@@ -156,10 +156,10 @@ DisplayPokemartDialogue_::
 	call DisplayChooseQuantityMenu
 	inc a
 	jr z, .buyMenuLoop ; if the player closed the choose quantity menu with the B button
-	ld a, [wcf91] ; item ID
-	ld [wd11e], a ; store item ID for GetItemName
+	ld a, [wCurItem]
+	ld [wNamedObjectIndex], a
 	call GetItemName
-	call CopyStringToCF4B ; copy name to wcf4b
+	call CopyToStringBuffer
 	ld hl, PokemartTellBuyPriceText
 	call PrintText
 	hlcoord 14, 7

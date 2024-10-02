@@ -1,10 +1,10 @@
-_DaisyInitialText::
+_BluesHouseDaisyRivalAtLabText::
 	text "Hi <PLAYER>!"
 	line "<RIVAL> is out at"
 	cont "Grandpa's lab."
 	done
 
-_DaisyOfferMapText::
+_BluesHouseDaisyOfferMapText::
 	text "Grandpa asked you"
 	line "to run an errand?"
 	cont "Here, this will"
@@ -14,16 +14,16 @@ _DaisyOfferMapText::
 _GotMapText::
 	text "<PLAYER> got a"
 	line "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "!@"
 	text_end
 
-_DaisyBagFullText::
+_BluesHouseDaisyBagFullText::
 	text "You have too much"
 	line "stuff with you."
 	done
 
-_DaisyUseMapText::
+_BluesHouseDaisyUseMapText::
 	text "Use the TOWN MAP"
 	line "to find out where"
 	cont "you are."

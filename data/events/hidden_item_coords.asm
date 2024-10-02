@@ -1,8 +1,9 @@
-hidden_item: MACRO
+MACRO hidden_item
 	db \1, \3, \2
 ENDM
 
 HiddenItemCoords:
+	table_width 3, HiddenItemCoords
 	; map id, x, y
 	hidden_item VIRIDIAN_FOREST,                1,  18
 	hidden_item VIRIDIAN_FOREST,               16,  42
@@ -58,4 +59,5 @@ HiddenItemCoords:
 	hidden_item VERMILION_CITY,                14,  11
 	hidden_item CERULEAN_CITY,                 15,   8
 	hidden_item ROUTE_4,                       40,   3
+	assert_max_table_length MAX_HIDDEN_ITEMS
 	db -1 ; end

@@ -14,7 +14,7 @@ _CardKeyFailText::
 	done
 
 _TrainerNameText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text ": @"
 	text_end
 
@@ -60,7 +60,7 @@ _PokeCenterSignText::
 _FoundItemText::
 	text "<PLAYER> found"
 	line "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "!@"
 	text_end
 

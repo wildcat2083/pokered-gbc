@@ -1,4 +1,4 @@
-_PewterGymText_5c4a3::
+_PewterGymBrockPostBattleAdviceText::
 	text "There are all"
 	line "kinds of trainers"
 	cont "in the world!"
@@ -12,12 +12,12 @@ _PewterGymText_5c4a3::
 	cont "your abilities!"
 	done
 
-_TM34PreReceiveText::
+_PewterGymBrockWaitTakeThisText::
 	text "Wait! Take this"
 	line "with you!"
 	done
 
-_ReceivedTM34Text::
+_PewterGymReceivedTM34Text::
 	text "<PLAYER> received"
 	line "TM34!@"
 	text_end
@@ -46,12 +46,12 @@ _TM34ExplanationText::
 	cont "it back double!"
 	done
 
-_TM34NoRoomText::
+_PewterGymTM34NoRoomText::
 	text "You don't have"
 	line "room for this!"
 	done
 
-_PewterGymText_5c4bc::
+_PewterGymBrockReceivedBoulderBadgeText::
 	text "I took"
 	line "you for granted."
 
@@ -63,7 +63,7 @@ _PewterGymText_5c4bc::
 	line "the BOULDERBADGE!@"
 	text_end
 
-_PewterGymText_5c4c1::
+_PewterGymBrockBoulderBadgeInfoText::
 	text_start
 
 	para "That's an official"
@@ -79,7 +79,7 @@ _PewterGymText_5c4c1::
 	cont "used any time!"
 	prompt
 
-_PewterGymBattleText1::
+_PewterGymCooltrainerMBattleText::
 	text "Stop right there,"
 	line "kid!"
 
@@ -88,7 +88,7 @@ _PewterGymBattleText1::
 	cont "BROCK!"
 	done
 
-_PewterGymEndBattleText1::
+_PewterGymCooltrainerMEndBattleText::
 	text "Darn!"
 
 	para "Light years isn't"
@@ -96,13 +96,13 @@ _PewterGymEndBattleText1::
 	cont "distance!"
 	prompt
 
-_PewterGymAfterBattleText1::
+_PewterGymCooltrainerMAfterBattleText::
 	text "You're pretty hot,"
 	line "but not as hot"
 	cont "as BROCK!"
 	done
 
-_PewterGymText_5c515::
+_PewterGymGuidePreAdviceText::
 	text "Hiya! I can tell"
 	line "you have what it"
 	cont "takes to become a"
@@ -116,12 +116,12 @@ _PewterGymText_5c515::
 	line "to the top!"
 	done
 
-_PewterGymText_5c51a::
+_PewterGymGuideBeginAdviceText::
 	text "All right! Let's"
 	line "get happening!"
 	prompt
 
-_PewterGymText_5c51f::
+_PewterGymGuideAdviceText::
 	text "The 1st #MON"
 	line "out in a match is"
 	cont "at the top of the"
@@ -133,13 +133,13 @@ _PewterGymText_5c51f::
 	cont "made easier!"
 	done
 
-_PewterGymText_5c524::
+_PewterGymGuideFreeServiceText::
 	text "It's a free"
 	line "service! Let's"
 	cont "get happening!"
 	prompt
 
-_PewterGymText_5c529::
+_PewterGymGuidePostBattleText::
 	text "Just as I thought!"
 	line "You're #MON"
 	cont "champ material!"

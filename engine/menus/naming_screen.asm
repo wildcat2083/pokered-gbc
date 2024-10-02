@@ -8,8 +8,8 @@ AskName:
 	ld b, 4
 	ld c, 11
 	call z, ClearScreenArea ; only if in wild battle
-	ld a, [wcf91]
-	ld [wd11e], a
+	ld a, [wCurPartySpecies]
+	ld [wNamedObjectIndex], a
 	call GetMonName
 	ld hl, DoYouWantToNicknameText
 	call PrintText
@@ -39,13 +39,13 @@ AskName:
 	pop hl
 	pop af
 	ld [wUpdateSpritesEnabled], a
-	ld a, [wcf4b]
+	ld a, [wStringBuffer]
 	cp "@"
 	ret nz
 .declinedNickname
 	ld d, h
 	ld e, l
-	ld hl, wcd6d
+	ld hl, wNameBuffer
 	ld bc, NAME_LENGTH
 	jp CopyData
 
@@ -63,7 +63,7 @@ DisplayNameRaterScreen::
 	call GBPalWhiteOutWithDelay3
 	call RestoreScreenTilesAndReloadTilePatterns
 	call LoadGBPal
-	ld a, [wcf4b]
+	ld a, [wStringBuffer]
 	cp "@"
 	jr z, .playerCancelled
 	ld hl, wPartyMonNicks
@@ -83,8 +83,8 @@ DisplayNameRaterScreen::
 
 DisplayNamingScreen:
 	push hl
-	ld hl, wd730
-	set 6, [hl]
+	ld hl, wStatusFlags5
+	set BIT_NO_TEXT_DELAY, [hl]
 	call GBPalWhiteOutWithDelay3
 	call ClearScreen
 	call UpdateSprites
@@ -112,7 +112,7 @@ DisplayNamingScreen:
 	ld a, 7
 	ld [wMaxMenuItem], a
 	ld a, "@"
-	ld [wcf4b], a
+	ld [wStringBuffer], a
 	xor a
 	ld hl, wNamingScreenSubmitName
 	ld [hli], a
@@ -160,7 +160,7 @@ DisplayNamingScreen:
 
 .submitNickname
 	pop de
-	ld hl, wcf4b
+	ld hl, wStringBuffer
 	ld bc, NAME_LENGTH
 	call CopyData
 	call GBPalWhiteOutWithDelay3
@@ -170,8 +170,8 @@ DisplayNamingScreen:
 	call GBPalNormal
 	xor a
 	ld [wAnimCounter], a
-	ld hl, wd730
-	res 6, [hl]
+	ld hl, wStatusFlags5
+	res BIT_NO_TEXT_DELAY, [hl]
 	ld a, [wIsInBattle]
 	and a
 	jp z, LoadTextBoxTilePatterns
@@ -329,9 +329,8 @@ DisplayNamingScreen:
 LoadEDTile:
 	ld de, ED_Tile
 	ld hl, vFont tile $70
-	ld bc, (ED_TileEnd - ED_Tile) / $8
-	; to fix the graphical bug on poor emulators
-	;lb bc, BANK(ED_Tile), (ED_TileEnd - ED_Tile) / $8
+	; BUG: BANK("Home") should be BANK(ED_Tile), although it coincidentally works as-is
+	lb bc, BANK("Home"), (ED_TileEnd - ED_Tile) / $8
 	jp CopyVideoDataDouble
 
 ED_Tile:
@@ -378,7 +377,7 @@ PrintNicknameAndUnderscores:
 	lb bc, 1, 10
 	call ClearScreenArea
 	hlcoord 10, 2
-	ld de, wcf4b
+	ld de, wStringBuffer
 	call PlaceString
 	hlcoord 10, 3
 	ld a, [wNamingScreenType]
@@ -440,9 +439,9 @@ DakutensAndHandakutens:
 
 INCLUDE "data/text/dakutens.asm"
 
-; calculates the length of the string at wcf4b and stores it in c
+; calculates the length of the string at wStringBuffer and stores it in c
 CalcStringLength:
-	ld hl, wcf4b
+	ld hl, wStringBuffer
 	ld c, $0
 .loop
 	ld a, [hl]
@@ -461,12 +460,12 @@ PrintNamingText:
 	ld de, RivalsTextString
 	dec a
 	jr z, .notNickname
-	ld a, [wcf91]
+	ld a, [wCurPartySpecies]
 	ld [wMonPartySpriteSpecies], a
 	push af
 	farcall WriteMonPartySpriteOAMBySpecies
 	pop af
-	ld [wd11e], a
+	ld [wNamedObjectIndex], a
 	call GetMonName
 	hlcoord 4, 1
 	call PlaceString

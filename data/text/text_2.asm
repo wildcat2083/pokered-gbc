@@ -10,7 +10,7 @@ _AIBattleUseItemText::
 	text_ram wTrainerName
 	text_start
 	line "used @"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text_start
 	cont "on @"
 	text_ram wEnemyMonNick
@@ -18,7 +18,7 @@ _AIBattleUseItemText::
 	prompt
 
 _TradeWentToText::
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text " went"
 	line "to @"
 	text_ram wLinkEnemyTrainerName
@@ -28,7 +28,7 @@ _TradeWentToText::
 _TradeForText::
 	text "For <PLAYER>'s"
 	line "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text ","
 	done
 
@@ -36,7 +36,7 @@ _TradeSendsText::
 	text_ram wLinkEnemyTrainerName
 	text " sends"
 	line "@"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "."
 	done
 
@@ -47,7 +47,7 @@ _TradeWavesFarewellText::
 	done
 
 _TradeTransferredText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " is"
 	line "transferred."
 	done
@@ -55,7 +55,7 @@ _TradeTransferredText::
 _TradeTakeCareText::
 	text "Take good care of"
 	line "@"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "."
 	done
 
@@ -63,14 +63,14 @@ _TradeWillTradeText::
 	text_ram wLinkEnemyTrainerName
 	text " will"
 	line "trade @"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text_start
 	done
 
 _TradeforText::
 	text "for <PLAYER>'s"
 	line "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "."
 	done
 
@@ -106,7 +106,7 @@ _OneMoreGoSlotMachineText::
 _LinedUpText::
 	text " lined up!"
 	line "Scored @"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text " coins!"
 	done
 
@@ -751,7 +751,7 @@ _VermilionGymTrashFailText::
 _FoundHiddenItemText::
 	text "<PLAYER> found"
 	line "@"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "!@"
 	text_end
 
@@ -912,7 +912,7 @@ _TrainerAboutToUseText::
 	text_ram wTrainerName
 	text " is"
 	line "about to use"
-	cont"@"
+	cont "@"
 	text_ram wEnemyMonNick
 	text "!"
 
@@ -1070,7 +1070,7 @@ _CantMoveText::
 _MoveIsDisabledText::
 	text "<USER>'s"
 	line "@"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " is"
 	cont "disabled!"
 	prompt
@@ -1094,8 +1094,8 @@ _InsteadText::
 	cont "@"
 	text_end
 
-_CF4BText::
-	text_ram wcf4b
+_MoveNameText::
+	text_ram wStringBuffer
 	text "@"
 
 _ExclamationPoint1Text::
@@ -1205,7 +1205,7 @@ _HitXTimesText::
 	prompt
 
 _GainedText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " gained"
 	line "@"
 	text_end
@@ -1226,10 +1226,10 @@ _ExpPointsText::
 	prompt
 
 _GrewLevelText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " grew"
 	line "to level @"
-	text_decimal wCurEnemyLVL, 1, 3
+	text_decimal wCurEnemyLevel, 1, 3
 	text "!@"
 	text_end
 
@@ -1382,7 +1382,7 @@ _PartyMenuSwapMonText::
 	done
 
 _PotionText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text_start
 	line "recovered by @"
 	text_decimal wHPBarHPDifference, 2, 3
@@ -1390,52 +1390,52 @@ _PotionText::
 	done
 
 _AntidoteText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " was"
 	line "cured of poison!"
 	done
 
 _ParlyzHealText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "'s"
 	line "rid of paralysis!"
 	done
 
 _BurnHealText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "'s"
 	line "burn was healed!"
 	done
 
 _IceHealText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " was"
 	line "defrosted!"
 	done
 
 _AwakeningText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text_start
 	line "woke up!"
 	done
 
 _FullHealText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "'s"
 	line "health returned!"
 	done
 
 _ReviveText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text_start
 	line "is revitalized!"
 	done
 
 _RareCandyText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " grew"
 	line "to level @"
-	text_decimal wCurEnemyLVL, 1, 3
+	text_decimal wCurEnemyLevel, 1, 3
 	text "!@"
 	text_end
 
@@ -1487,7 +1487,7 @@ _DepositHowManyText::
 	done
 
 _ItemWasStoredText::
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " was"
 	line "stored via PC."
 	prompt
@@ -1514,7 +1514,7 @@ _WithdrawHowManyText::
 _WithdrewItemText::
 	text "Withdrew"
 	line "@"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "."
 	prompt
 
@@ -1559,7 +1559,7 @@ _DepositWhichMonText::
 	done
 
 _MonWasStoredText::
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text " was"
 	line "stored in Box @"
 	text_ram wBoxNumString
@@ -1577,11 +1577,11 @@ _BoxFullText::
 	prompt
 
 _MonIsTakenOutText::
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text " is"
 	line "taken out."
 	cont "Got @"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "."
 	prompt
 
@@ -1606,19 +1606,17 @@ _ReleaseWhichMonText::
 _OnceReleasedText::
 	text "Once released,"
 	line "@"
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text " is"
 	cont "gone forever. OK?"
 	done
 
 _MonWasReleasedText::
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text " was"
 	line "released outside."
 	cont "Bye @"
-
-_CF4BExclamationText::
-	text_ram wcf4b
+	text_ram wStringBuffer
 	text "!"
 	prompt
 
@@ -1644,7 +1642,7 @@ _HereYouGoText::
 _SoYouWantPrizeText::
 	text "So, you want"
 	line "@"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "?"
 	done
 
@@ -1758,7 +1756,7 @@ _DoYouWantToNicknameText::
 	text "Do you want to"
 	line "give a nickname"
 	cont "to @"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text "?"
 	done
 
@@ -1777,13 +1775,13 @@ _WillBeTradedText::
 	text_ram wNameOfPlayerMonToBeTraded
 	text " and"
 	line "@"
-	text_ram wcd6d
+	text_ram wNameBuffer
 	text " will"
 	cont "be traded."
 	done
 
 _TextIDErrorText::
-	text_decimal hSpriteIndexOrTextID, 1, 2
+	text_decimal hTextID, 1, 2
 	text " ERROR."
 	done
 
